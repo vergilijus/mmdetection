@@ -2,7 +2,6 @@ import warnings
 
 import matplotlib.pyplot as plt
 import mmcv
-from mmcv.ops import RoIPool
 import numpy as np
 import pycocotools.mask as maskUtils
 import torch
@@ -87,11 +86,6 @@ def inference_detector(model, img):
         # scatter to specified GPU
         data = scatter(data, [device])[0]
     else:
-        for m in model.modules():
-            assert not isinstance(
-                m, RoIPool
-            ), 'CPU inference with RoIPool is not supported currently.'
-        # just get the actual data from DataContainer
         data['img_metas'] = data['img_metas'][0].data
     # forward the model
     with torch.no_grad():
